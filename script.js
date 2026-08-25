@@ -1,12 +1,9 @@
-//your JS code here. If required.
 const codes = document.querySelectorAll(".code");
 
 codes.forEach((input, index) => {
 
-  // Move to next input after entering a digit
+  // Move focus forward after entering a number
   input.addEventListener("input", function () {
-
-    // Allow only numbers
     this.value = this.value.replace(/\D/g, "");
 
     if (this.value !== "" && index < codes.length - 1) {
@@ -15,27 +12,30 @@ codes.forEach((input, index) => {
   });
 
 
-  // Backspace behavior
+  // Backspace handling
   input.addEventListener("keydown", function (event) {
 
-    if (event.key === "Backspace") {
+    if (event.key !== "Backspace") {
+      return;
+    }
 
-      // If current field contains a digit, delete it
-      if (this.value !== "") {
-        this.value = "";
-        event.preventDefault();
-        return;
-      }
+    // Always prevent the browser's default Backspace behavior
+    event.preventDefault();
 
-      // If current field is empty, move to previous field
-      if (index > 0) {
-        codes[index - 1].focus();
-        codes[index - 1].value = "";
-      }
+    // If current field has a value, delete ONLY the current value
+    if (this.value !== "") {
+      this.value = "";
+      return;
+    }
+
+    // If current field is empty, move focus to previous field
+    // Do NOT clear the previous field
+    if (index > 0) {
+      codes[index - 1].focus();
     }
   });
 });
 
 
-// Automatically focus the first field
+// Focus the first input initially
 codes[0].focus();
