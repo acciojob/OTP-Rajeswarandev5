@@ -2,7 +2,7 @@ const codes = document.querySelectorAll(".code");
 
 codes.forEach((input, index) => {
 
-  // Move focus forward after entering a number
+  // Move to next input after entering a number
   input.addEventListener("input", function () {
     this.value = this.value.replace(/\D/g, "");
 
@@ -12,30 +12,39 @@ codes.forEach((input, index) => {
   });
 
 
-  // Backspace handling
+  // Backspace behavior
   input.addEventListener("keydown", function (event) {
 
     if (event.key !== "Backspace") {
       return;
     }
 
-    // Always prevent the browser's default Backspace behavior
+    // Prevent browser default behavior
     event.preventDefault();
 
-    // If current field has a value, delete ONLY the current value
+    // Case 1: Current field has a value
+    // Delete the current value only
     if (this.value !== "") {
       this.value = "";
       return;
     }
 
-    // If current field is empty, move focus to previous field
-    // Do NOT clear the previous field
+    // Case 2: Current field is empty
     if (index > 0) {
-      codes[index - 1].focus();
+
+      const previousInput = codes[index - 1];
+
+      // Move to previous field
+      previousInput.focus();
+
+      // Delete the previous field's value
+      if (previousInput.value !== "") {
+        previousInput.value = "";
+      }
     }
   });
 });
 
 
-// Focus the first input initially
+// Initial focus
 codes[0].focus();
